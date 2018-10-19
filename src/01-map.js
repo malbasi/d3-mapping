@@ -31,19 +31,6 @@ d3.csv(require('./data/world-cities.csv'))
 function ready([json, allPoints]) {
   let countries = topojson.feature(json, json.objects.countries)
 
-  var xExtent = d3.extent(allPoints, d => +d.lng)
-  var yExtent = d3.extent(allPoints, d => +d.lat)
-
-  let xPositionScale = d3
-    .scaleLinear()
-    .domain(xExtent)
-    .range([0, width])
-
-  let yPositionScale = d3
-    .scaleLinear()
-    .domain(yExtent)
-    .range([height, 0])
-  
   let countryExtent = d3.extent(allPoints, d => d.population)
 
   var colorScale = d3.scaleSequential(d3.interpolateCool)

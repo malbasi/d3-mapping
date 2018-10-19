@@ -28,47 +28,29 @@ d3.json(require('./data/counties_with_election_data.topojson'))
   .then(ready)
   .catch(err => console.log('Failed on', err))
 
-  function ready(json) {
+function ready(json) {
+  let counties = topojson.feature(json, json.objects.us_counties)
 
-    let counties = topojson.feature(json, json.objects.us_counties)
-
-    projection.fitSize([width, height], counties)
+  projection.fitSize([width, height], counties)
 
   svg
     .selectAll('.state')
     .data(counties.features)
     .enter()
-    .append('path')
+    .append('svg:path')
     .attr('class', 'state')
     .attr('d', path)
     .attr('fill', d => {
-      if (d.properties.trump > d.properties.clinton) { 
+      if (d.properties.trump > d.properties.clinton) {
         return 'green'
       } else {
         return '#821A51'
       }
     })
     .attr('opacity', d => {
-      let trump = d.properties.trump 
+      let trump = d.properties.trump
       let clinton = d.properties.clinton
       let totalVotes = trump + clinton
-      // console.log('total votes', totalVotes)
-      // console.log('in the state of', d.properties.state)
-      console.log('alpha of', alphaScale(totalVotes))
       return alphaScale(totalVotes)
-      // if (trump > clinton) {
-      //   let trumpTotal = trump / totalVotes
-      //   // console.log('total ratio', trumpTotal)
-      //   // console.log('alpha of', alphaScale(trumpTotal))
-      //   return alphaScale(trumpTotal)
-      // } else {
-      //   let clintonTotal = clinton / totalVotes
-      //   // console.log('total ratio', clintonTotal)
-      //   // console.log('alpha of', alphaScale(clintonTotal))
-      //   return alphaScale(clintonTotal)
-      // }
     })
-
-  // console.log(counties.features[0].properties)
-
-  }
+}
